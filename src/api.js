@@ -2,6 +2,10 @@
 import axios from "axios";
 const BASE_URL = "https://aiblogwriter.azurewebsites.net";
 const FUNCTION_KEY = process.env.REACT_APP_FUNCTION_KEY
+console.log("Function Key:", FUNCTION_KEY);
+if (!FUNCTION_KEY) {
+    throw new Error("REACT_APP_FUNCTION_KEY is not defined. Please set it in your .env file.");
+}
 axios.defaults.headers.common["x-functions-key"] = FUNCTION_KEY;
 axios.defaults.headers.common["Content-Type"] = "application/json";
 axios.defaults.headers.common["Accept"] = "application/json";
