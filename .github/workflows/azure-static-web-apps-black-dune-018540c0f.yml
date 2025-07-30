@@ -19,9 +19,13 @@ jobs:
        contents: read
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           submodules: true
+          node-version: '18'
           lfs: false
+      - run: npm ci
+      - run: npm run build
       - name: Install OIDC Client from Core Package
         run: npm install @actions/core@1.6.0 @actions/http-client
       - name: Get Id Token
