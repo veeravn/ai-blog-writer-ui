@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Box } from "@mui/material";
 import { comparePosts } from "../api";
+import { Paper } from "@mui/material";
 
 export default function CompareModal({ open, onClose, post }) {
     const [v1, setV1] = useState("");

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from "@mui/material";
 import { revertPost } from "../api";
+import { Paper } from "@mui/material";
 
 export default function RevertModal({ open, onClose, post }) {
     const [version, setVersion] = useState("");

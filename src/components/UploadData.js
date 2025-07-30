@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Button, Box, CircularProgress, Alert, Typography } from "@mui/material";
 import { uploadData } from "../api";
+import { Paper } from "@mui/material";
 
 export default function UploadData() {
     const [file, setFile] = useState(null);

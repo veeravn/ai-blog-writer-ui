@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { TextField, Button, Box, CircularProgress, Alert, Typography } from "@mui/material";
 import { getPreferences, savePreferences } from "../api";
+import { Paper } from "@mui/material";
 
 const USER_ID = "user123"; // Replace as needed
 

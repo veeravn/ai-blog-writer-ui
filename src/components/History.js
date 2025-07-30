@@ -3,6 +3,7 @@ import { Box, Button, CircularProgress, Alert, Typography, Dialog, DialogTitle, 
 import { getHistory, comparePosts, revertPost } from "../api";
 import CompareModal from "./CompareModal";
 import RevertModal from "./RevertModal";
+import { Paper } from "@mui/material";
 
 const USER_ID = "user123"; // Replace with actual user
 

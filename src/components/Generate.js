@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { TextField, Button, CircularProgress, Alert, Box, Typography } from "@mui/material";
 import { generateBlogPost } from "../api";
+import { Paper } from "@mui/material";
 
 export default function Generate() {
     const [prompt, setPrompt] = useState("");
