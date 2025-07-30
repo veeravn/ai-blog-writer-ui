@@ -1,48 +1,40 @@
+// src/components/UploadData.js
 import React, { useState } from "react";
-import { Box, Typography, Button, Paper } from "@mui/material";
-import axios from "axios";
+import { Button, Box, CircularProgress, Alert, Typography } from "@mui/material";
+import { uploadData } from "../api";
 
 export default function UploadData() {
     const [file, setFile] = useState(null);
-    const [status, setStatus] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [msg, setMsg] = useState("");
 
     const handleUpload = async () => {
         if (!file) return;
-        setStatus("Uploading...");
+        setLoading(true); setMsg("");
         const formData = new FormData();
         formData.append("file", file);
-
         try {
-            const res = await axios.post(
-                "https://blog-writer.azurewebsites.net/upload",
-                formData
-            );
-            setStatus(res.data.status || "Uploaded successfully");
+            await uploadData(formData);
+            setMsg("Upload successful!");
         } catch (err) {
-            setStatus("Error: " + (err.response?.data?.error || err.message));
+            setMsg("Upload failed: " + (err.response?.data?.error || err.message));
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
-        <Paper elevation={3} sx={{ p: 3 }}>
-            <Typography variant="h5" gutterBottom>
-                Upload Data
-            </Typography>
-            <input
-                type="file"
-                accept=".txt,.json,.docx"
-                onChange={(e) => setFile(e.target.files[0])}
-                style={{ marginBottom: 10 }}
-            />
-            <Button
-                variant="contained"
-                onClick={handleUpload}
-                disabled={!file}
-                sx={{ ml: 2 }}
-            >
-                Upload
-            </Button>
-            {status && <Box mt={2}>{status}</Box>}
+        <Paper sx={{ p: 3, mb: 3, background: "#fff", boxShadow: 2 }}>
+            <Box>
+                <Typography variant="h5">Upload Data</Typography>
+                <Box sx={{ mt: 2 }}>
+                    <input type="file" onChange={e => setFile(e.target.files[0])} />
+                </Box>
+                <Button variant="contained" sx={{ mt: 2 }} onClick={handleUpload} disabled={!file || loading}>
+                    {loading ? <CircularProgress size={24} /> : "Upload"}
+                </Button>
+                {msg && <Alert sx={{ mt: 2 }} severity={msg.startsWith("Upload successful") ? "success" : "error"}>{msg}</Alert>}
+            </Box>
         </Paper>
     );
 }

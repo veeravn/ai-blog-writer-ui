@@ -1,54 +1,52 @@
-import React, { useEffect, useState } from "react";
-import { Box, TextField, Button, Typography, Paper } from "@mui/material";
-import axios from "axios";
+// src/components/Preferences.js
+import React, { useState, useEffect } from "react";
+import { TextField, Button, Box, CircularProgress, Alert, Typography } from "@mui/material";
+import { getPreferences, savePreferences } from "../api";
+
+const USER_ID = "user123"; // Replace as needed
 
 export default function Preferences() {
-    const [preferences, setPreferences] = useState({ tone: "", structure: "" });
-    const [status, setStatus] = useState("");
+    const [tone, setTone] = useState("");
+    const [structure, setStructure] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [msg, setMsg] = useState("");
 
     useEffect(() => {
-        // Replace with actual user ID if needed
-        axios
-            .get("https://blog-writer.azurewebsites.net/preferences/testuser")
-            .then((res) => setPreferences(res.data))
-            .catch(() => { });
+        setLoading(true);
+        getPreferences(USER_ID)
+            .then(({ data }) => {
+                setTone(data.tone || "");
+                setStructure(data.structure || "");
+            })
+            .catch(() => { })
+            .finally(() => setLoading(false));
     }, []);
 
-    const savePrefs = async () => {
+    const handleSave = async () => {
+        setLoading(true); setMsg("");
         try {
-            await axios.post(
-                "https://blog-writer.azurewebsites.net/preferences/testuser",
-                preferences
-            );
-            setStatus("Saved!");
-        } catch (err) {
-            setStatus("Error: " + (err.response?.data?.error || err.message));
+            await savePreferences(USER_ID, { tone, structure });
+            setMsg("Preferences saved!");
+        } catch (e) {
+            setMsg("Save failed: " + (e.response?.data?.error || e.message));
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
-        <Paper elevation={3} sx={{ p: 3 }}>
-            <Typography variant="h5" gutterBottom>
-                Preferences
-            </Typography>
-            <TextField
-                label="Preferred Tone"
-                value={preferences.tone}
-                onChange={(e) => setPreferences({ ...preferences, tone: e.target.value })}
-                fullWidth
-                sx={{ mb: 2 }}
-            />
-            <TextField
-                label="Preferred Structure"
-                value={preferences.structure}
-                onChange={(e) => setPreferences({ ...preferences, structure: e.target.value })}
-                fullWidth
-                sx={{ mb: 2 }}
-            />
-            <Button variant="contained" onClick={savePrefs}>
-                Save Preferences
-            </Button>
-            {status && <Box mt={2}>{status}</Box>}
+        <Paper sx={{ p: 3, mb: 3, background: "#fff", boxShadow: 2 }}>
+            <Box>
+                <Typography variant="h5">Preferences</Typography>
+                <Box sx={{ mt: 2, display: "flex", gap: 2 }}>
+                    <TextField label="Tone" value={tone} onChange={e => setTone(e.target.value)} fullWidth />
+                    <TextField label="Structure" value={structure} onChange={e => setStructure(e.target.value)} fullWidth />
+                </Box>
+                <Button sx={{ mt: 2 }} variant="contained" onClick={handleSave} disabled={loading}>
+                    {loading ? <CircularProgress size={24} /> : "Save"}
+                </Button>
+                {msg && <Alert sx={{ mt: 2 }} severity={msg.startsWith("Preferences saved") ? "success" : "error"}>{msg}</Alert>}
+            </Box>
         </Paper>
     );
 }
