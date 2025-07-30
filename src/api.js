@@ -1,7 +1,10 @@
 // src/api.js
 import axios from "axios";
 const BASE_URL = "https://aiblogwriter.azurewebsites.net";
-
+const FUNCTION_KEY = process.env.REACT_APP_FUNCTION_KEY
+axios.defaults.headers.common["x-functions-key"] = FUNCTION_KEY;
+axios.defaults.headers.common["Content-Type"] = "application/json";
+axios.defaults.headers.common["Accept"] = "application/json";
 export const generateBlogPost = (data) =>
     axios.post(`${BASE_URL}/blog-post`, data);
 
