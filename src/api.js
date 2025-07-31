@@ -5,11 +5,12 @@ const FUNCTION_KEY = process.env.REACT_APP_FUNCTION_KEY
 if (!FUNCTION_KEY) {
     throw new Error("REACT_APP_FUNCTION_KEY is not defined. Please set it in your .env file.");
 }
-axios.defaults.headers.common["x-functions-key"] = FUNCTION_KEY;
+// axios.defaults.headers.common["x-functions-key"] = FUNCTION_KEY;
 axios.defaults.headers.common["Content-Type"] = "application/json";
 axios.defaults.headers.common["Accept"] = "application/json";
 axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
-axios.defaults.params.common["code"] = FUNCTION_KEY;
+axios.defaults.params = {}
+// axios.defaults.params["code"] = FUNCTION_KEY;
 export const generateBlogPost = (data) =>
     axios.post(`${BASE_URL}/blog-post`, data);
 
