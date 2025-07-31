@@ -1,6 +1,6 @@
 // src/api.js
 import axios from "axios";
-const BASE_URL = "https://aiblogwriter.azurewebsites.net";
+const BASE_URL = "/api";
 const FUNCTION_KEY = process.env.REACT_APP_FUNCTION_KEY
 if (!FUNCTION_KEY) {
     throw new Error("REACT_APP_FUNCTION_KEY is not defined. Please set it in your .env file.");
