@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Box, Button, CircularProgress, Alert, Typography, Dialog, DialogTitle, DialogContent, DialogActions, List, ListItem, ListItemText } from "@mui/material";
-import { getHistory, comparePosts, revertPost } from "../api";
+import { getHistory } from "../api";
 import CompareModal from "./CompareModal";
 import RevertModal from "./RevertModal";
 import { Paper } from "@mui/material";
@@ -20,7 +20,7 @@ export default function History() {
 
     useEffect(() => {
         setLoading(true);
-        fetchAllPosts(USER_ID)
+        getHistory(USER_ID)
             .then(posts => setPosts(posts))
             .catch(e => setError(e.response?.data?.error || e.message))
             .finally(() => setLoading(false));
