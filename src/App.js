@@ -9,10 +9,28 @@ import Preferences from "./components/Preferences";
 import History from "./components/History";
 
 const tabLabels = ["Generate", "Upload Data", "Preferences", "History/Versions"];
-
+// App title/logo section
+const AppTitle = () => (
+    <Box
+        sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "left",
+            py: 3,
+            flexDirection: "column"
+        }}
+    >
+        <img
+            src="/ai-blog-writer-logo.png"
+            alt="AI Blog Writer Logo"
+            style={{ height: 200, marginBottom: 12 }}
+        />
+    </Box>
+);
+export { AppTitle };
 export default function App() {
     const [tab, setTab] = useState(0);
-
+    
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -25,18 +43,7 @@ export default function App() {
                     </Tabs>
                 </AppBar>
                 {/* Title Section */}
-                <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-                    <Typography variant="h1" color="primary.main" sx={{
-                        background: "primary.contrastText",
-                        px: 4, py: 2,
-                        borderRadius: 2,
-                        boxShadow: 3,
-                        minWidth: "340px",
-                        textAlign: "center"
-                    }}>
-                        AI Blog Writer
-                    </Typography>
-                </Box>
+                <AppTitle />
                 {/* Main Body */}
                 <Box sx={{ p: { xs: 1, sm: 3 }, maxWidth: 900, mx: "auto", mt: 4 }}>
                     {tab === 0 && <Generate />}
