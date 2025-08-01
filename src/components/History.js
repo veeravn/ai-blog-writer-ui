@@ -30,8 +30,8 @@ export default function History() {
     const handlePostClick = (post) => {
         setSelectedPost(post);
         setLoading(true);
-        fetchPostVersions(USER_ID, post.id)
-            .then(versions => setVersions(versions))
+        getHistory(USER_ID, post.id)
+            .then(({ data }) => setVersions(Array.isArray(data.history) ? data.history : []))
             .catch(e => setError(e.response?.data?.error || e.message))
             .finally(() => setLoading(false));
     };
