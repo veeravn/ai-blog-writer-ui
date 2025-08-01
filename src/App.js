@@ -26,8 +26,8 @@ export default function App() {
                 </AppBar>
                 {/* Title Section */}
                 <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-                    <Typography variant="h4" color="primary.contrastText" sx={{
-                        background: "#fff",
+                    <Typography variant="h1" color="primary.main" sx={{
+                        background: "primary.contrastText",
                         px: 4, py: 2,
                         borderRadius: 2,
                         boxShadow: 3,

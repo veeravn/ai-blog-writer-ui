@@ -8,7 +8,6 @@ if (!FUNCTION_KEY) {
 // axios.defaults.headers.common["x-functions-key"] = FUNCTION_KEY;
 axios.defaults.headers.common["Content-Type"] = "application/json";
 axios.defaults.headers.common["Accept"] = "application/json";
-axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
 axios.defaults.params = {}
 // axios.defaults.params["code"] = FUNCTION_KEY;
 export const generateBlogPost = (data) =>
