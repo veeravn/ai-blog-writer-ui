@@ -1,42 +1,41 @@
-import React, { useState } from "react";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Box } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Box, Typography, Divider } from "@mui/material";
 import { comparePosts } from "../api";
-import { Paper } from "@mui/material";
 
-export default function CompareModal({ open, onClose, post }) {
-    const [v1, setV1] = useState("");
-    const [v2, setV2] = useState("");
-    const [result, setResult] = useState("");
+// Props: open, onClose, version1, version2
+export default function CompareModal({ open, onClose, version1, version2 }) {
+    const [diff, setDiff] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const handleCompare = async () => {
-        setLoading(true);
-        try {
-            const { data } = await comparePosts(post.id, v1, v2);
-            setResult(JSON.stringify(data, null, 2));
-        } catch (e) {
-            setResult("Error: " + (e.response?.data?.error || e.message));
-        } finally {
-            setLoading(false);
+    useEffect(() => {
+        if (open && version1 && version2) {
+            setLoading(true);
+            comparePosts(version1.id, version1.version, version2.version)
+                .then(({ data }) => setDiff(data.diff || "No difference"))
+                .catch(e => setDiff("Error comparing versions"))
+                .finally(() => setLoading(false));
+        } else {
+            setDiff("");
         }
-    };
+    }, [open, version1, version2]);
+
+    if (!version1 || !version2) return null;
 
     return (
-        <Paper sx={{ p: 3, mb: 3, background: "#fff", boxShadow: 2 }}>
-            <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-                <DialogTitle>Compare Versions</DialogTitle>
-                <DialogContent>
-                    <Box sx={{ display: "flex", gap: 2, mb: 2 }}>
-                        <TextField label="Version 1" value={v1} onChange={e => setV1(e.target.value)} />
-                        <TextField label="Version 2" value={v2} onChange={e => setV2(e.target.value)} />
-                        <Button onClick={handleCompare} disabled={loading}>Compare</Button>
-                    </Box>
-                    {result && <pre style={{ background: "#eee", padding: 10 }}>{result}</pre>}
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={onClose}>Close</Button>
-                </DialogActions>
-            </Dialog>
-        </Paper>
+        <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+            <DialogTitle>Compare Versions</DialogTitle>
+            <DialogContent>
+                <Typography variant="subtitle1" color="text.secondary" sx={{ mb: 1 }}>
+                    Comparing <b>Version {version1.version}</b> and <b>Version {version2.version}</b>
+                </Typography>
+                <Divider sx={{ mb: 2 }} />
+                <Box sx={{ fontFamily: "monospace", whiteSpace: "pre-wrap", background: "#f8f8f8", p: 2, borderRadius: 1 }}>
+                    {loading ? "Loading diff..." : diff}
+                </Box>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={onClose} color="primary">Close</Button>
+            </DialogActions>
+        </Dialog>
     );
 }

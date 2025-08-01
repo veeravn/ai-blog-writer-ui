@@ -1,38 +1,38 @@
 import React, { useState } from "react";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Alert } from "@mui/material";
 import { revertPost } from "../api";
-import { Paper } from "@mui/material";
 
-export default function RevertModal({ open, onClose, post }) {
-    const [version, setVersion] = useState("");
-    const [msg, setMsg] = useState("");
+// Props: open, onClose, version
+export default function RevertModal({ open, onClose, version }) {
+    const [status, setStatus] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const handleRevert = async () => {
+    const handleRevert = () => {
         setLoading(true);
-        try {
-            const { data } = await revertPost(post.id, version);
-            setMsg("Revert successful: " + JSON.stringify(data));
-        } catch (e) {
-            setMsg("Error: " + (e.response?.data?.error || e.message));
-        } finally {
-            setLoading(false);
-        }
+        revertPost(version.id, version.version)
+            .then(() => setStatus("Post reverted to this version!"))
+            .catch(e => setStatus("Failed to revert."))
+            .finally(() => setLoading(false));
     };
 
+    if (!version) return null;
+
     return (
-        <Paper sx={{ p: 3, mb: 3, background: "#fff", boxShadow: 2 }}>
-            <Dialog open={open} onClose={onClose}>
-                <DialogTitle>Revert to Version</DialogTitle>
-                <DialogContent>
-                    <TextField label="Version Number" value={version} onChange={e => setVersion(e.target.value)} />
-                    <Button onClick={handleRevert} disabled={loading} sx={{ ml: 2 }}>Revert</Button>
-                    {msg && <pre style={{ background: "#eee", padding: 10 }}>{msg}</pre>}
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={onClose}>Close</Button>
-                </DialogActions>
-            </Dialog>
-        </Paper>
+        <Dialog open={open} onClose={onClose}>
+            <DialogTitle>Revert to Version {version.version}?</DialogTitle>
+            <DialogContent>
+                <Typography>Are you sure you want to revert to this version?</Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mt: 1, mb: 2 }}>
+                    {version.content.slice(0, 120)}{version.content.length > 120 ? "..." : ""}
+                </Typography>
+                {status && <Alert severity={status.includes("revert") ? "success" : "error"}>{status}</Alert>}
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={onClose} disabled={loading}>Cancel</Button>
+                <Button onClick={handleRevert} color="error" disabled={loading}>
+                    {loading ? "Reverting..." : "Revert"}
+                </Button>
+            </DialogActions>
+        </Dialog>
     );
 }

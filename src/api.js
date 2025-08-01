@@ -22,8 +22,13 @@ export const getPreferences = (userId) =>
 export const savePreferences = (userId, data) =>
     axios.post(`${BASE_URL}/preferences/${userId}`, data);
 
-export const getHistory = (userId) =>
-    axios.get(`${BASE_URL}/history/${userId}`);
+export const getHistory = (userId, postId = null) => {
+    // If postId is provided, fetch version history; else, fetch all posts
+    const url = postId
+        ? `${BASE_URL}/history/${userId}/${postId}`
+        : `${BASE_URL}/history/${userId}`;
+    return axios.get(url);
+};
 
 export const revertPost = (postId, toVersion) =>
     axios.post(`${BASE_URL}/blog-post/${postId}/revert?to_version=${toVersion}`);
