@@ -21,7 +21,7 @@ export default function History() {
     useEffect(() => {
         setLoading(true);
         getHistory(USER_ID)
-            .then(posts => setPosts(posts))
+            .then(({ data }) => setPosts(Array.isArray(data.posts) ? data.posts : []))
             .catch(e => setError(e.response?.data?.error || e.message))
             .finally(() => setLoading(false));
     }, []);
@@ -51,7 +51,7 @@ export default function History() {
                     <Typography sx={{ mb: 2 }}>Your Posts:</Typography>
                     {loading && <CircularProgress />}
                     <List>
-                        {posts.map(post => (
+                        {(Array.isArray(posts) ? posts : []).map(post => (
                             <ListItem button key={post.id} onClick={() => handlePostClick(post)}>
                                 <ListItemText
                                     primary={post.title || post.prompt.slice(0, 40)}
