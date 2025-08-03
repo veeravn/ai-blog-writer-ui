@@ -25,8 +25,8 @@ export const savePreferences = (userId, data) =>
 export const getHistory = (userId, postId = null) => {
     // If postId is provided, fetch version history; else, fetch all posts
     const url = postId
-        ? `${BASE_URL}/history/${userId}/${postId}`
-        : `${BASE_URL}/history/${userId}`;
+        ? `${BASE_URL}/posts/${userId}/${postId}`
+        : `${BASE_URL}/posts/${userId}`;
     return axios.get(url);
 };
 
