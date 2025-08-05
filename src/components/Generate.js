@@ -19,7 +19,7 @@ export default function Generate() {
             const { data } = await generateBlogPost({
                 prompt, style_description: styleDescription, style_reference_post_id: styleReferencePostId
             });
-            setOutput(data.content || JSON.stringify(data));
+            setOutput(data.full_text || data.content || "");
         } catch (err) {
             setError(err.response?.data?.error || err.message);
         } finally {
@@ -41,7 +41,13 @@ export default function Generate() {
                 <Button variant="contained" onClick={handleGenerate} sx={{ mt: 2 }} disabled={loading || !prompt}>
                     {loading ? <CircularProgress size={24} /> : "Generate"}
                 </Button>
-                {output && <Alert sx={{ mt: 2 }} severity="success"><pre style={{ whiteSpace: "pre-wrap" }}><ReactMarkdown>{output}</ReactMarkdown></pre></Alert>}
+                {
+                    output && <Alert sx={{ mt: 2 }} severity="success">
+                        <pre style={{ whiteSpace: "pre-wrap" }}>
+                            <ReactMarkdown>{output}</ReactMarkdown>
+                        </pre>
+                    </Alert>
+                }
                 {error && <Alert sx={{ mt: 2 }} severity="error">{error}</Alert>}
             </Box>
         </Paper >
