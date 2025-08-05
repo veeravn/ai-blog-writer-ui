@@ -22,7 +22,7 @@ export default function Generate() {
                     include_title: true
                 }
             });
-            setOutput(data.full_text || data.content || "");
+            setOutput(data.sections || []);
         } catch (err) {
             setError(err.response?.data?.error || err.message);
         } finally {
@@ -45,11 +45,18 @@ export default function Generate() {
                     {loading ? <CircularProgress size={24} /> : "Generate"}
                 </Button>
                 {
-                    output && <Alert sx={{ mt: 2 }} severity="success">
-                        <pre style={{ whiteSpace: "pre-wrap" }}>
-                            <ReactMarkdown>{output}</ReactMarkdown>
-                        </pre>
-                    </Alert>
+                    Array.isArray(output) && output.length > 0 && (
+                        <div className="space-y-8">
+                            {
+                                output.map((section, index) => (
+                                    <div key={index}>
+                                        <ReactMarkdown className="text-xl font-semibold mb-2">{section.header}</ReactMarkdown>
+                                        <ReactMarkdown className="text-gray-800 leading-relaxed">{section.content}</ReactMarkdown>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    )
                 }
                 {error && <Alert sx={{ mt: 2 }} severity="error">{error}</Alert>}
             </Box>
