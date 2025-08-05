@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { TextField, Button, CircularProgress, Alert, Box, Typography } from "@mui/material";
 import { generateBlogPost } from "../api";
 import { Paper } from "@mui/material";
+import ReactMarkdown from 'react-markdown';
 
 export default function Generate() {
     const [prompt, setPrompt] = useState("");
@@ -40,7 +41,7 @@ export default function Generate() {
                 <Button variant="contained" onClick={handleGenerate} sx={{ mt: 2 }} disabled={loading || !prompt}>
                     {loading ? <CircularProgress size={24} /> : "Generate"}
                 </Button>
-                {output && <Alert sx={{ mt: 2 }} severity="success"><pre style={{ whiteSpace: "pre-wrap" }}>{output}</pre></Alert>}
+                {output && <Alert sx={{ mt: 2 }} severity="success"><pre style={{ whiteSpace: "pre-wrap" }}><ReactMarkdown>{output}</ReactMarkdown></pre></Alert>}
                 {error && <Alert sx={{ mt: 2 }} severity="error">{error}</Alert>}
             </Box>
         </Paper >
