@@ -17,7 +17,10 @@ export default function Generate() {
         setLoading(true); setOutput(""); setError("");
         try {
             const { data } = await generateBlogPost({
-                prompt, style_description: styleDescription, style_reference_post_id: styleReferencePostId
+                prompt, style_description: styleDescription, style_reference_post_id: styleReferencePostId,
+                structure: {
+                    include_title: true
+                }
             });
             setOutput(data.full_text || data.content || "");
         } catch (err) {
