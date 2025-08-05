@@ -50,8 +50,8 @@ export default function Generate() {
                             {
                                 output.map((section, index) => (
                                     <div key={index}>
-                                        <ReactMarkdown className="text-xl font-semibold mb-2">{section.header}</ReactMarkdown>
-                                        <ReactMarkdown className="text-gray-800 leading-relaxed">{section.content}</ReactMarkdown>
+                                        <h2><ReactMarkdown className="text-xl font-semibold mb-2">{section.header}</ReactMarkdown></h2>
+                                        <p><ReactMarkdown className="text-gray-800 leading-relaxed">{section.content}</ReactMarkdown></p>
                                     </div>
                                 ))
                             }
